@@ -405,6 +405,7 @@ class _SummaryBlock extends pw.StatelessWidget {
 
   @override
   pw.Widget build(pw.Context context) {
+    if (summary.isEmpty) return pw.SizedBox();
     final summaryItem = summary[summary.keys.toList().first];
     return pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,

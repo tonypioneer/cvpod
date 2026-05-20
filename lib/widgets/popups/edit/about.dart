@@ -34,11 +34,10 @@ import 'package:cvpod/screens/profile/profile_tabs.dart';
 import 'package:cvpod/utils/cvData/aboutItem.dart';
 import 'package:cvpod/utils/misc.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// Summary edit popup
 Form editAbout(BuildContext context, CvManager cvManager, String webId,
     String createdTime) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController nameController =
       TextEditingController(text: cvManager.getAbout[createdTime].name);
   TextEditingController positionController =
@@ -57,7 +56,7 @@ Form editAbout(BuildContext context, CvManager cvManager, String webId,
       TextEditingController(text: cvManager.getAbout[createdTime].web);
 
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -167,7 +166,7 @@ Form editAbout(BuildContext context, CvManager cvManager, String webId,
           child: ElevatedButton(
             child: const Text('Save Changes'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.save();
 
                 showAnimationDialog(
@@ -203,6 +202,8 @@ Form editAbout(BuildContext context, CvManager cvManager, String webId,
                     newDataInstance,
                     prevDataInstance,
                     createdTime);
+
+                if (!context.mounted) return;
 
                 // Reload the page
                 Navigator.pushAndRemoveUntil(

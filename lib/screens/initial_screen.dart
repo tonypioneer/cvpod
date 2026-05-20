@@ -89,7 +89,13 @@ class InitialScreenState extends State<InitialScreen>
         builder: (context, snapshot) {
           Widget returnVal;
           if (snapshot.connectionState == ConnectionState.done) {
-            returnVal = loadedScreen(snapshot.data as List);
+            if (snapshot.hasError) {
+              returnVal = Scaffold(
+                body: Center(child: Text('Error loading data: ${snapshot.error}')),
+              );
+            } else {
+              returnVal = loadedScreen(snapshot.data as List);
+            }
           } else {
             returnVal =
                 Scaffold(body: loadingScreen(normalLoadingScreenHeight));

@@ -21,6 +21,7 @@
 /// Authors: Anushka Vidanage
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -201,7 +202,7 @@ Future<void> addProfileData(String rdfLine, String fileUrl) async {
       'Authorization': 'DPoP $accessToken',
       'Connection': 'keep-alive',
       'Content-Type': 'application/sparql-update',
-      'Content-Length': query.length.toString(),
+      'Content-Length': utf8.encode(query).length.toString(),
       'DPoP': dPopToken,
     },
     body: query,
@@ -312,7 +313,10 @@ Future<String> httpRequest(
       headers: headerMap,
     );
   } else {
-    headerMap['Content-Length'] = content!.length.toString();
+    headerMap['Content-Length'] = (content is String
+            ? utf8.encode(content).length
+            : (content as List).length)
+        .toString();
     if (requestType == HttpRequest.post) {
       response = await http.post(
         Uri.parse(url),

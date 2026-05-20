@@ -33,11 +33,10 @@ import 'package:cvpod/constants/app.dart';
 import 'package:cvpod/utils/cvData/awardItem.dart';
 import 'package:cvpod/utils/misc.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// Summary edit popup
 Form editAward(BuildContext context, CvManager cvManager, String webId,
     String createdTime) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController formControllerAwd1 =
       TextEditingController(text: cvManager.getAwards[createdTime].title);
   TextEditingController formControllerAwd2 =
@@ -45,7 +44,7 @@ Form editAward(BuildContext context, CvManager cvManager, String webId,
   TextEditingController formControllerAwd3 =
       TextEditingController(text: cvManager.getAwards[createdTime].description);
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -97,7 +96,7 @@ Form editAward(BuildContext context, CvManager cvManager, String webId,
           child: ElevatedButton(
             child: const Text('Save Changes'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.save();
 
                 showAnimationDialog(
@@ -128,6 +127,8 @@ Form editAward(BuildContext context, CvManager cvManager, String webId,
                     newDataInstance,
                     prevDataInstance,
                     createdTime);
+
+                if (!context.mounted) return;
 
                 // Reload the page
                 Navigator.pushAndRemoveUntil(

@@ -33,11 +33,10 @@ import 'package:cvpod/constants/app.dart';
 import 'package:cvpod/utils/cvData/educationItem.dart';
 import 'package:cvpod/utils/misc.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// Summary edit popup
 Form editEdu(BuildContext context, CvManager cvManager, String webId,
     String createdTime) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController formControllerEdu1 =
       TextEditingController(text: cvManager.getEducation[createdTime].degree);
   TextEditingController formControllerEdu2 =
@@ -48,7 +47,7 @@ Form editEdu(BuildContext context, CvManager cvManager, String webId,
       TextEditingController(text: cvManager.getEducation[createdTime].comments);
 
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -115,7 +114,7 @@ Form editEdu(BuildContext context, CvManager cvManager, String webId,
           child: ElevatedButton(
             child: const Text('Save Changes'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.save();
 
                 showAnimationDialog(
@@ -147,6 +146,8 @@ Form editEdu(BuildContext context, CvManager cvManager, String webId,
                     newDataInstance,
                     prevDataInstance,
                     createdTime);
+
+                if (!context.mounted) return;
 
                 // Reload the page
                 Navigator.pushAndRemoveUntil(

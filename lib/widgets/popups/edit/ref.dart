@@ -33,11 +33,10 @@ import 'package:cvpod/constants/app.dart';
 import 'package:cvpod/utils/cvData/refereeItem.dart';
 import 'package:cvpod/utils/misc.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// Summary edit popup
 Form editRef(BuildContext context, CvManager cvManager, String webId,
     String createdTime) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController formControllerRef1 =
       TextEditingController(text: cvManager.getReferees[createdTime].name);
   TextEditingController formControllerRef2 =
@@ -47,7 +46,7 @@ Form editRef(BuildContext context, CvManager cvManager, String webId,
   TextEditingController formControllerRef4 =
       TextEditingController(text: cvManager.getReferees[createdTime].institute);
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -113,7 +112,7 @@ Form editRef(BuildContext context, CvManager cvManager, String webId,
           child: ElevatedButton(
             child: const Text('Save Changes'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.save();
 
                 showAnimationDialog(
@@ -146,6 +145,8 @@ Form editRef(BuildContext context, CvManager cvManager, String webId,
                     newDataInstance,
                     prevDataInstance,
                     createdTime);
+
+                if (!context.mounted) return;
 
                 // Reload the page
                 Navigator.pushAndRemoveUntil(

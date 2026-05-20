@@ -33,15 +33,14 @@ import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/widgets/loading_animation.dart';
 import 'package:cvpod/screens/profile/profile_tabs.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// New education entry popup
 Form newPubEntry(BuildContext context, CvManager cvManager, String webId) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController formControllerPub1 = TextEditingController();
   TextEditingController formControllerPub2 = TextEditingController();
 
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -78,7 +77,7 @@ Form newPubEntry(BuildContext context, CvManager cvManager, String webId) {
           child: ElevatedButton(
             child: const Text('Save Entry'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.s3ave();
 
                 showAnimationDialog(
@@ -100,6 +99,8 @@ Form newPubEntry(BuildContext context, CvManager cvManager, String webId) {
 
                 cvManager = await writeProfileData(context, cvManager, webId,
                     DataType.publication, newDataInstance, dateTimeStr);
+
+                if (!context.mounted) return;
 
                 // Reload the page
                 Navigator.pushAndRemoveUntil(

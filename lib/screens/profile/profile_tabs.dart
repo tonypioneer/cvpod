@@ -55,7 +55,7 @@ class _ProfileTabsState extends State<ProfileTabs>
     with TickerProviderStateMixin {
   // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static Future? _asyncDataFetch;
+  Future? _asyncDataFetch;
 
   @override
   void initState() {
@@ -175,7 +175,12 @@ class _ProfileTabsState extends State<ProfileTabs>
           builder: (context, snapshot) {
             Widget returnVal;
             if (snapshot.connectionState == ConnectionState.done) {
-              returnVal = loadedScreen(snapshot.data);
+              if (snapshot.hasError) {
+                returnVal = Center(
+                    child: Text('Error loading data: ${snapshot.error}'));
+              } else {
+                returnVal = loadedScreen(snapshot.data);
+              }
             } else {
               returnVal = loadingScreen(normalLoadingScreenHeight);
             }
