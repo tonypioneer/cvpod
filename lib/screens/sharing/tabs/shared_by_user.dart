@@ -23,13 +23,16 @@
 import 'dart:io';
 
 import 'package:cvpod/constants/colors.dart';
+import 'package:cvpod/screens/nav/nav_screen.dart';
+import 'package:cvpod/screens/sharing/sharing_tabs.dart';
 import 'package:cvpod/widgets/shared_cvs_table.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-//import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart' hide buildSharedResourcesTable;
 
+import 'package:cvpod/apis/rest_api.dart';
 import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/constants/app.dart';
 import 'package:universal_html/html.dart' as html;
@@ -124,11 +127,88 @@ class SharedByUserState extends State<SharedByUser>
     );
   }
 
+  /// Show a dialog listing the user's shared-cvs PDF files so they can pick
+  /// one to grant permissions on.
+  Future<void> _showPickCvDialog(BuildContext context) async {
+    List<String> files;
+    try {
+      files = await getSharedCvFiles(widget.webId);
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not load shared CVs: $e')),
+      );
+      return;
+    }
+
+    if (!context.mounted) return;
+
+    if (files.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'No PDFs found in shared-cvs/. Generate and save a CV PDF first.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    final String? chosen = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Select a CV to share'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: files.length,
+              itemBuilder: (_, index) {
+                final fileName = files[index];
+                return ListTile(
+                  leading: const Icon(Icons.picture_as_pdf, color: appDarkBlue1),
+                  title: Text(fileName),
+                  onTap: () => Navigator.of(dialogContext).pop(fileName),
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (chosen == null) return;
+    if (!context.mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NavScreen(
+          webId: widget.webId,
+          cvManager: widget.cvManager,
+          childPage: GrantPermissionUi(
+            backgroundColor: bgCardLight,
+            resourceNames: ['shared-cvs/$chosen'],
+            showAppBar: false,
+            child: SharingTabs(
+              webId: widget.webId,
+              cvManager: widget.cvManager,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    //String webId = widget.webId;
-    //CvManager cvManager = widget.cvManager;
-
     return SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -158,10 +238,9 @@ class SharedByUserState extends State<SharedByUser>
               ),
               largeHeightGap,
               ElevatedButton(
-                  onPressed: () {
-                    // changeKeyPopup(context, widget);
-                  },
-                  child: const Text('Create a new share')),
+                onPressed: () => _showPickCvDialog(context),
+                child: const Text('Create a new share'),
+              ),
               smallHeightGap,
             ])));
   }

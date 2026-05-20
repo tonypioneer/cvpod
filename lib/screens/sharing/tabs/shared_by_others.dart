@@ -1,4 +1,4 @@
-// CVs shared by with the user by others.
+// CVs shared with the user by others.
 //
 // Copyright (C) 2024 Software Innovation Institute, Australian National University
 //
@@ -24,12 +24,14 @@ library;
 
 import 'package:flutter/material.dart';
 
-//import 'package:solidpod/solidpod.dart';
+import 'package:solidpod/solidpod.dart';
+import 'package:solidui/solidui.dart' hide normalLoadingScreenHeight;
 
+import 'package:cvpod/screens/sharing/sharing_tabs.dart';
 import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/constants/app.dart';
 
-class SharedByOthers extends StatefulWidget {
+class SharedByOthers extends StatelessWidget {
   final String webId;
   final CvManager cvManager;
 
@@ -40,46 +42,72 @@ class SharedByOthers extends StatefulWidget {
   });
 
   @override
-  SharedByOthersState createState() => SharedByOthersState();
-}
-
-class SharedByOthersState extends State<SharedByOthers>
-    with SingleTickerProviderStateMixin {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    //String webId = widget.webId;
-    //CvManager cvManager = widget.cvManager;
+    return FutureBuilder(
+      future: sharedResources(null, null),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return loadingScreen(normalLoadingScreenHeight);
+        }
 
-    return const SingleChildScrollView(
-        child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15.0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              largeHeightGap,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        if (snapshot.hasError) {
+          return Center(
+            child: Text('Error loading shared CVs: ${snapshot.error}'),
+          );
+        }
+
+        final sharedResMap = (snapshot.data as Map?) ?? {};
+
+        if (sharedResMap.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 48.0),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
+                  SizedBox(height: 16),
                   Text(
-                    'CVs Shared with You by Others',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    'No CVs have been shared with you yet.',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ],
               ),
-              smallHeightGap,
-              // ElevatedButton(
-              //     onPressed: () {
-              //       changeKeyPopup(context, widget);
-              //     },
-              //     child: const Text('Click to Change Security Key')),
-              smallHeightGap,
-            ])));
+            ),
+          );
+        }
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                largeHeightGap,
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'CVs Shared with You by Others',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                smallHeightGap,
+                buildSharedResourcesTable(
+                  context,
+                  sharedResMap,
+                  SharingTabs(webId: webId, cvManager: cvManager),
+                ),
+                largeHeightGap,
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

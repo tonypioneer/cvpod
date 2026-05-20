@@ -431,6 +431,14 @@ Future<Map> readResourcesAcl(
 //   return true;
 // }
 
+/// Get the list of PDF files in the shared-cvs container for [webId].
+Future<List<String>> getSharedCvFiles(String webId) async {
+  final containerUrl =
+      webId.replaceAll('profile/card#me', 'cvpod/data/shared-cvs/');
+  final res = await getResourcesInContainer(containerUrl);
+  return res.files.toList();
+}
+
 // Load PDF file from a POD
 Future<dynamic> loadRemotePdf(String fileUrl, String fileName,
     {bool fileEncrypted = false}) async {
