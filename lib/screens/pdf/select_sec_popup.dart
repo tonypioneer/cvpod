@@ -7,9 +7,8 @@ import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/utils/misc.dart';
 import 'package:flutter/material.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 void dataSelectDialog(BuildContext context, CvManager cvManager, String webId) {
+  final formKey = GlobalKey<FormState>();
   Map dataTypeSelectFlagMap = {
     DataType.summary: false,
     DataType.education: false,
@@ -67,7 +66,7 @@ void dataSelectDialog(BuildContext context, CvManager cvManager, String webId) {
                   ),
                 ),
                 Form(
-                    key: _formKey,
+                    key: formKey,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -107,7 +106,7 @@ void dataSelectDialog(BuildContext context, CvManager cvManager, String webId) {
                             child: ElevatedButton(
                               child: const Text('Build PDF'),
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   if (dataTypeSelectFlagMap.values
                                       .any((element) => element)) {
                                     Navigator.pushAndRemoveUntil(

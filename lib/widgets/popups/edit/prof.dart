@@ -29,15 +29,15 @@ import 'package:cvpod/apis/rest_api.dart';
 import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/widgets/loading_animation.dart';
 import 'package:cvpod/screens/profile/profile_tabs.dart';
+import 'package:cvpod/screens/nav/nav_screen.dart';
 import 'package:cvpod/constants/app.dart';
 import 'package:cvpod/utils/cvData/professionalItem.dart';
 import 'package:cvpod/utils/misc.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// Summary edit popup
 Form editProf(BuildContext context, CvManager cvManager, String webId,
     String createdTime) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController formControllerProf1 =
       TextEditingController(text: cvManager.getProfessional[createdTime].title);
   TextEditingController formControllerProf2 = TextEditingController(
@@ -47,7 +47,7 @@ Form editProf(BuildContext context, CvManager cvManager, String webId,
   TextEditingController formControllerProf4 = TextEditingController(
       text: cvManager.getProfessional[createdTime].comments);
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -114,7 +114,7 @@ Form editProf(BuildContext context, CvManager cvManager, String webId,
           child: ElevatedButton(
             child: const Text('Save Changes'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.save();
 
                 showAnimationDialog(
@@ -147,13 +147,19 @@ Form editProf(BuildContext context, CvManager cvManager, String webId,
                     prevDataInstance,
                     createdTime);
 
+                if (!context.mounted) return;
+
                 // Reload the page
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfileTabs(
+                      builder: (context) => NavScreen(
                             webId: webId,
                             cvManager: cvManager,
+                            childPage: ProfileTabs(
+                              webId: webId,
+                              cvManager: cvManager,
+                            ),
                           )),
                   (Route<dynamic> route) =>
                       false, // This predicate ensures all previous routes are removed

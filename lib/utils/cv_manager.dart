@@ -40,35 +40,39 @@ import 'package:cvpod/utils/cvData/researchItem.dart';
 import 'package:flutter/services.dart';
 
 class CvManager {
+  static final CvManager _instance = CvManager._internal();
+  factory CvManager() => _instance;
+  CvManager._internal();
+
   /// Summary of the user
-  static final Map _summary = {};
+  final Map _summary = {};
 
   /// Personal details
-  static final Map _aboutData = {};
+  final Map _aboutData = {};
 
   /// Professional qualifications
-  static final Map _professionalData = {};
+  final Map _professionalData = {};
 
   /// Educational qualifications
-  static final Map _educationData = {};
+  final Map _educationData = {};
 
   /// Research data
-  static final Map _researchData = {};
+  final Map _researchData = {};
 
   /// Publications - citations and year
-  static final Map _publicationsData = {};
+  final Map _publicationsData = {};
 
   /// Awards
-  static final Map _awardsData = {};
+  final Map _awardsData = {};
 
   /// Presentations
-  static final Map _presentationsData = {};
+  final Map _presentationsData = {};
 
   /// Volunteering / Involvement activities
-  static final Map _extraData = {};
+  final Map _extraData = {};
 
   /// Referee details
-  static final Map _refereeData = {};
+  final Map _refereeData = {};
 
   /// Profile picture path
   Uint8List? portraitBytes;
@@ -257,6 +261,9 @@ class CvManager {
   }
 
   Map getCvData(DataType dataType) {
+    if (dataType == DataType.portrait) {
+      return {};
+    }
     Map funcMap = {
       DataType.summary: getSummary,
       DataType.about: getAbout,
@@ -270,7 +277,7 @@ class CvManager {
       DataType.referee: getReferees,
     };
 
-    return funcMap[dataType];
+    return funcMap[dataType] ?? {};
   }
 
   void updateCvData(
@@ -295,7 +302,7 @@ class CvManager {
     for (DataType dataType in cvDataMap.keys) {
       final cvData = cvDataMap[dataType];
 
-      if (cvData.isNotEmpty || cvData != '') {
+      if (cvData.isNotEmpty && cvData != '') {
         setCvData(dataType, cvData);
       }
     }
@@ -357,7 +364,7 @@ class CvManager {
           }
 
         case DataType.portrait:
-          portraitBytes;
+          portraitBytes = null;
       }
     }
   }
@@ -374,7 +381,7 @@ class CvManager {
     _presentationsData.clear();
     _extraData.clear();
     _refereeData.clear();
-    portraitBytes;
+    portraitBytes = null;
   }
 
   /// Update updated date string

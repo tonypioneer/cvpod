@@ -29,19 +29,19 @@ import 'package:cvpod/apis/rest_api.dart';
 import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/widgets/loading_animation.dart';
 import 'package:cvpod/screens/profile/profile_tabs.dart';
+import 'package:cvpod/screens/nav/nav_screen.dart';
 import 'package:cvpod/constants/app.dart';
 import 'package:cvpod/utils/cvData/summaryItem.dart';
 import 'package:cvpod/utils/misc.dart';
 
-final _formKey = GlobalKey<FormState>();
-
 /// Summary edit popup
 Form editSum(BuildContext context, CvManager cvManager, String webId,
     String createdTime) {
+  final formKey = GlobalKey<FormState>();
   TextEditingController formControllerSum =
       TextEditingController(text: cvManager.getSummary[createdTime].summary);
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -66,7 +66,7 @@ Form editSum(BuildContext context, CvManager cvManager, String webId,
           child: ElevatedButton(
             child: const Text('Save Changes'),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 //_formKey.currentState!.save();
 
                 showAnimationDialog(
@@ -94,13 +94,19 @@ Form editSum(BuildContext context, CvManager cvManager, String webId,
                     prevDataInstance,
                     createdTime);
 
+                if (!context.mounted) return;
+
                 // Reload the page
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfileTabs(
+                      builder: (context) => NavScreen(
                             webId: webId,
                             cvManager: cvManager,
+                            childPage: ProfileTabs(
+                              webId: webId,
+                              cvManager: cvManager,
+                            ),
                           )),
                   (Route<dynamic> route) =>
                       false, // This predicate ensures all previous routes are removed

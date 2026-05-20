@@ -104,7 +104,7 @@ enum DataType {
 
   referee('referee', Icons.person_search_outlined, 9, parseReferees),
 
-  portrait('portrait', Icons.person, 10, parseReferees);
+  portrait('portrait', Icons.person, 10, parsePortrait);
 
   /// Generative enum constructor
   const DataType(this.value, this.icon, this.tab, this.dataParser);

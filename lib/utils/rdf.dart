@@ -20,6 +20,8 @@
 ///
 /// Authors: Anushka Vidanage
 
+import 'package:flutter/foundation.dart';
+
 import 'package:cvpod/constants/app.dart';
 import 'package:rdflib/rdflib.dart';
 
@@ -33,7 +35,9 @@ Map<String, dynamic> parseTTL(String ttlContent) {
     final pre = extract(t.pre.value as String);
     final obj = extract(t.obj.value as String);
     if (dataMap.containsKey(sub)) {
-      assert(!(dataMap[sub] as Map).containsKey(pre));
+      if ((dataMap[sub] as Map).containsKey(pre)) {
+        debugPrint('RDF: duplicate predicate $pre for subject $sub — overwriting');
+      }
       dataMap[sub][pre] = obj;
     } else {
       dataMap[sub] = {pre: obj};
@@ -155,4 +159,9 @@ Map parseReferees(Map ttlMap) {
     }
   }
   return refMap;
+}
+
+/// No-op parser for portrait data type (portrait is binary, not TTL).
+Map parsePortrait(Map ttlMap) {
+  return {};
 }
