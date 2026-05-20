@@ -32,6 +32,7 @@ import 'package:cvpod/apis/rest_api.dart';
 import 'package:cvpod/utils/cv_manager.dart';
 import 'package:cvpod/widgets/loading_animation.dart';
 import 'package:cvpod/screens/profile/profile_tabs.dart';
+import 'package:cvpod/screens/nav/nav_screen.dart';
 
 /// New education entry popup
 Form newPresEntry(BuildContext context, CvManager cvManager, String webId) {
@@ -124,9 +125,13 @@ Form newPresEntry(BuildContext context, CvManager cvManager, String webId) {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfileTabs(
+                      builder: (context) => NavScreen(
                             webId: webId,
                             cvManager: cvManager,
+                            childPage: ProfileTabs(
+                              webId: webId,
+                              cvManager: cvManager,
+                            ),
                           )),
                   (Route<dynamic> route) =>
                       false, // This predicate ensures all previous routes are removed
