@@ -84,6 +84,10 @@ flutter build windows          # Windows
 | [lib/utils/rdf.dart](lib/utils/rdf.dart) | 26–48 | `parseTTL` + `getRdfData` — parses Turtle into Maps |
 | [lib/screens/pdf/template.dart](lib/screens/pdf/template.dart) | 9–31 | PDF template registry + `LayoutCallbackWithData` typedef |
 
+## Adding New Features and Debugging
+
+**Important**: When you work on a new feasure or bug, create a git branch first. Then work on changes in that branch for the remainder of the session.  
+
 ## Additional Documentation
 
 | Document | When to check |
