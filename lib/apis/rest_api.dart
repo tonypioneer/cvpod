@@ -80,13 +80,18 @@ Future<Map> fetchProfileData(
     } else {
       String filePath = dataType.ttlFilePath;
 
-      dynamic fileContent = await readPod(filePath);
+      try {
+        dynamic fileContent = await readPod(filePath);
 
-      if (fileContent != SolidFunctionCallStatus.fail &&
-          fileContent.isNotEmpty) {
-        Map dataMap = getRdfData(fileContent, dataType);
-        cvDataMap[dataType] = dataMap;
-      } else {
+        if (fileContent != SolidFunctionCallStatus.fail &&
+            fileContent.isNotEmpty) {
+          Map dataMap = getRdfData(fileContent, dataType);
+          cvDataMap[dataType] = dataMap;
+        } else {
+          cvDataMap[dataType] = '';
+        }
+      } on ResourceNotExistException {
+        // File doesn't exist yet (e.g. first run with empty Pod) — treat as empty.
         cvDataMap[dataType] = '';
       }
     }

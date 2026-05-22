@@ -108,7 +108,7 @@ class Home extends StatelessWidget {
                   Icons.info,
                   appDarkBlue1,
                   'INFO!',
-                  'You do not have any data in your profile yet!',
+                  'You do not have any data in your profile yet. Start adding data!',
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
