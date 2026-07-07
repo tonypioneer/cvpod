@@ -44,6 +44,17 @@ const String siiUrl = 'https://sii.anu.edu.au';
 
 const String authors = 'Authors: Anushka Vidanage';
 
+/// URL of the Solid-OIDC client identifier document for CVPod.
+const String oidcClientId =
+    'https://cvpod.solidcommunity.au/client-profile.jsonld';
+
+/// Redirect URIs offered to the Solid-OIDC flow, one per platform.
+const List<String> oidcRedirectUris = [
+  'https://cvpod.solidcommunity.au/redirect.html',
+  'com.togaware.cvpod://redirect',
+  'http://localhost:4400/redirect.html',
+];
+
 const smallPadding = 10.0;
 const largePadding = 40.0;
 const double normalLoadingScreenHeight = 200.0;

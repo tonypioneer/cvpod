@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 
 import 'package:solidui/solidui.dart';
 
+import 'package:cvpod/constants/app.dart';
 import 'package:cvpod/constants/colors.dart';
 import 'package:cvpod/screens/initial_screen.dart';
 
@@ -59,22 +60,24 @@ class CvPod extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: appDarkBlue1),
         useMaterial3: true,
       ),
-      home: const SolidLogin(
+      home: SolidLogin(
         title: 'CVPod',
         required: true,
-        image: AssetImage(
+        image: const AssetImage(
             'assets/images/cvpod_login_bg.jpg'), // Image by https://www.pexels.com
-        logo: AssetImage(
+        logo: const AssetImage(
             'assets/images/cvpod_logo.png'), // Curriculum icons created by Freepik - Flaticon (https://www.flaticon.com)
         link: 'https://github.com/anushkavidanage/cvpod/blob/main/README.md',
         //required: false,
-        infoButtonStyle: InfoButtonStyle(
+        clientId: oidcClientId,
+        redirectUris: oidcRedirectUris,
+        infoButtonStyle: const InfoButtonStyle(
           tooltip: 'Visit the CVPod documentation.',
         ),
-        loginButtonStyle: LoginButtonStyle(
+        loginButtonStyle: const LoginButtonStyle(
           background: appLightBlue2,
         ),
-        child: InitialScreen(),
+        child: const InitialScreen(),
       ),
     );
   }

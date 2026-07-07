@@ -25,10 +25,10 @@ dependencies:
   printing: ^5.14.3
   rdflib: ^0.2.12
   flutter_riverpod: ^3.3.1
-  solidpod: ^0.12.4
+  solidpod: ^1.0.13
   # solidpod:
   #   path: ../solidpod # Use a local path whilst solidpod is under development.
-  solidui: ^0.3.24
+  solidui: ^1.0.18
   universal_html: ^2.3.0
   url_launcher: ^6.3.2
   #flutter_svg: ^2.0.10+1

@@ -119,7 +119,11 @@ Future<Map> checkProfileData(
 Future<bool> checkFileExists(String fileName, BuildContext context) async {
   final filePath = [await getDataDirPath(), fileName].join('/');
 
-  await loginIfRequired(context);
+  await loginIfRequired(
+    context: context,
+    clientId: oidcClientId,
+    redirectUris: oidcRedirectUris,
+  );
 
   // Check if the file already exists
 
