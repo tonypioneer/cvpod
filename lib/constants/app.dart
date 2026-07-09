@@ -47,7 +47,7 @@ const String authors = 'Authors: Anushka Vidanage';
 
 /// URL of the Solid-OIDC client identifier document for CVPod.
 const String oidcClientId =
-    'https://dev.empwr.au/cvpod/client-profile.jsonld';
+    'https://anushkavidanage.github.io/cvpod/client-profile.jsonld';
 
 /// Redirect URIs offered to the Solid-OIDC flow, one per platform.
 List<String> get oidcRedirectUris => kIsWeb
