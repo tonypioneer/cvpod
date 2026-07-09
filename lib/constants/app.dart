@@ -27,6 +27,7 @@ library;
 
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -46,14 +47,15 @@ const String authors = 'Authors: Anushka Vidanage';
 
 /// URL of the Solid-OIDC client identifier document for CVPod.
 const String oidcClientId =
-    'https://cvpod.solidcommunity.au/client-profile.jsonld';
+    'https://dev.empwr.au/cvpod/client-profile.jsonld';
 
 /// Redirect URIs offered to the Solid-OIDC flow, one per platform.
-const List<String> oidcRedirectUris = [
-  'https://cvpod.solidcommunity.au/redirect.html',
-  'com.togaware.cvpod://redirect',
-  'http://localhost:4400/redirect.html',
-];
+List<String> get oidcRedirectUris => kIsWeb
+    ? ['${Uri.base.origin}/redirect.html']
+    : const [
+        'com.togaware.cvpod://redirect',
+        'http://localhost:4400/redirect.html',
+      ];
 
 const smallPadding = 10.0;
 const largePadding = 40.0;
