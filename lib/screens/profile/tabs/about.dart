@@ -98,12 +98,11 @@ class _AboutMeState extends State<AboutMe> {
 
     final browseButton = ElevatedButton(
       onPressed: () async {
-        final result = await FilePicker.pickFiles();
-        if (result != null) {
-          if (['jpg', 'jpeg']
-              .contains(result.files.single.path!.split('.').last)) {
+        final file = await FilePicker.pickFile();
+        if (file?.path != null) {
+          if (['jpg', 'jpeg'].contains(file!.path!.split('.').last)) {
             setState(() {
-              uploadFileSelect = result.files.single.path!;
+              uploadFileSelect = file.path!;
             });
           } else {
             if (!context.mounted) return;

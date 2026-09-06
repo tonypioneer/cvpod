@@ -119,7 +119,11 @@ Future<Map> checkProfileData(
 Future<bool> checkFileExists(String fileName, BuildContext context) async {
   final filePath = [await getDataDirPath(), fileName].join('/');
 
-  await loginIfRequired(context);
+  await loginIfRequired(
+    context: context,
+    clientId: cvpodClientId,
+    redirectUris: cvpodRedirectUris,
+  );
 
   // Check if the file already exists
 

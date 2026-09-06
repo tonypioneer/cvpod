@@ -23,7 +23,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:cvpod/constants/app.dart';
-import 'package:rdflib/rdflib.dart';
+import 'package:rdf/rdf.dart';
 
 Map<String, dynamic> parseTTL(String ttlContent) {
   final g = Graph();

@@ -20,7 +20,7 @@
 ///
 /// Authors: Anushka Vidanage
 
-import 'package:rdflib/rdflib.dart';
+import 'package:rdf/rdf.dart';
 
 import 'package:cvpod/constants/schema.dart';
 

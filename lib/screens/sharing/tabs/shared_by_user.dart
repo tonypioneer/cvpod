@@ -80,24 +80,21 @@ class SharedByUserState extends State<SharedByUser>
             ..click();
           html.Url.revokeObjectUrl(url);
         } else if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-          String? selectedFile = await FilePicker.saveFile(
+          // file_picker writes the bytes itself and returns the URI it
+          // wrote them to.
+
+          final Uri? savedUri = await FilePicker.saveFile(
             type: FileType.custom,
             fileName: fileName,
             allowedExtensions: ['pdf'],
+            bytes: pdfData,
           );
 
-          if (selectedFile != null && selectedFile.isNotEmpty) {
-            final file = File(selectedFile);
-            await file.writeAsBytes(pdfData).then((value) {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('File downloaded successfully')),
-              );
-            }).catchError((error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Error saving file: $error')),
-              );
-            });
+          if (savedUri != null) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('File downloaded successfully')),
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('No file selected')),
@@ -167,7 +164,8 @@ class SharedByUserState extends State<SharedByUser>
               itemBuilder: (_, index) {
                 final fileName = files[index];
                 return ListTile(
-                  leading: const Icon(Icons.picture_as_pdf, color: appDarkBlue1),
+                  leading:
+                      const Icon(Icons.picture_as_pdf, color: appDarkBlue1),
                   title: Text(fileName),
                   onTap: () => Navigator.of(dialogContext).pop(fileName),
                 );
