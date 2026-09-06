@@ -121,8 +121,8 @@ Future<bool> checkFileExists(String fileName, BuildContext context) async {
 
   await loginIfRequired(
     context: context,
-    clientId: cvpodClientId,
-    redirectUris: cvpodRedirectUris,
+    clientId: oidcClientId,
+    redirectUris: oidcRedirectUris,
   );
 
   // Check if the file already exists

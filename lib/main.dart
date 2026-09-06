@@ -63,14 +63,14 @@ class CvPod extends StatelessWidget {
       home: SolidLogin(
         title: 'CVPod',
         required: true,
-        image: AssetImage(
+        image: const AssetImage(
             'assets/images/cvpod_login_bg.jpg'), // Image by https://www.pexels.com
-        logo: AssetImage(
+        logo: const AssetImage(
             'assets/images/cvpod_logo.png'), // Curriculum icons created by Freepik - Flaticon (https://www.flaticon.com)
         link: 'https://github.com/anushkavidanage/cvpod/blob/main/README.md',
-        clientId: cvpodClientId,
-        redirectUris: cvpodRedirectUris,
         //required: false,
+        clientId: oidcClientId,
+        redirectUris: oidcRedirectUris,
         infoButtonStyle: const InfoButtonStyle(
           tooltip: 'Visit the CVPod documentation.',
         ),

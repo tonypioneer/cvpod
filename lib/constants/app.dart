@@ -45,24 +45,15 @@ const String siiUrl = 'https://sii.anu.edu.au';
 
 const String authors = 'Authors: Anushka Vidanage';
 
-/// The Solid-OIDC client identifier for CVPod.
-///
-/// The document it points at declares the redirect URIs a Solid server will
-/// accept for this app, so it must stay in step with [cvpodRedirectUris].
-
-const String cvpodClientId =
+/// URL of the Solid-OIDC client identifier document for CVPod.
+const String oidcClientId =
     'https://anushkavidanage.github.io/cvpod/client-profile.jsonld';
 
-/// The redirect URIs to register for this build of CVPod.
-///
-/// On the web the redirect page must be served from the same origin as the
-/// app itself. On the native platforms the custom scheme is used, with the
-/// loopback address kept for debugging a desktop build.
-
-List<String> get cvpodRedirectUris => kIsWeb
+/// Redirect URIs offered to the Solid-OIDC flow, one per platform.
+List<String> get oidcRedirectUris => kIsWeb
     ? ['${Uri.base.origin}/redirect.html']
     : const [
-        'com.example.cvpod://redirect',
+        'com.togaware.cvpod://redirect',
         'http://localhost:4400/redirect.html',
       ];
 
